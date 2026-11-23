@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Web Python</title>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        font-family: system-ui, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      main {
+        text-align: center;
+      }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        color: #94a3b8;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Simple Web Python</h1>
+      <p id="message">เว็บเริ่มทำงานแล้ว</p>
+      <p>Served by Python's built-in http.server.</p>
+    </main>
+    <script>
+      const message = new URLSearchParams(window.location.search).get("message");
+      if (message) {
+        document.getElementById("message").textContent = message;
+      } else {
+        fetch("/message")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`No loading message: ${response.status}`);
+            }
+            return response.text();
+          })
+          .then((text) => {
+            document.getElementById("message").textContent = text;
+          })
+          .catch((error) => {
+            console.error(error);
+            document.getElementById("message").textContent = "Unable to load startup message.";
+          });
+      }
+    </script>
+  </body>
+</html>
